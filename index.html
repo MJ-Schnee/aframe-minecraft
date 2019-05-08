@@ -5,24 +5,26 @@
     <title>A-Frame Minecraft</title>
     <meta name="description" content="Welcome to a VR tour of Loveland High School!">
     <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+    <script src="./scripts.js"></script>
   </head>
   <body>
     <a-scene fog="type: linear; color: #90b7ee; far: 220; near: 0;">
       <a-assets>
-        <image id="grass" src="./high res textures/grass_block.jpg"></image>
-        <image id="dirt" src="./high res textures/dirt.jpg"></image>
-        <image id="wood" src="./high res textures/wood.jpg"></image>
-        <image id="cobblestone" src="./high res textures/cobblestone.jpg"></image>
-        <image id="stone" src="./high res textures/stone.jpg"></image>
+        <image id="grassTopBlock" src="./high res textures/grass_top_block.jpg"></image>
+        <image id="dirtBlock" src="./high res textures/dirt_block.jpg"></image>
+        <image id="woodSideBlock" src="./high res textures/wood_side_block.jpg"></image>
+        <image id="cobblestoneBlock" src="./high res textures/cobblestone_block.jpg"></image>
+        <image id="stoneBlock" src="./high res textures/stone_block.jpg"></image>
       </a-assets>
 
       <!--Sky-->
       <a-sky color="#87ceeb"></a-sky>
       <!--Floor-->
       <a-entity geometry="primitive: plane; height: 500; width: 500"
-        position="0 1 0"
+        position="0 0 0"
         rotation="-90 0 0"
-        material="shader: flat; src: #grass; repeat: 500 500"></a-entity>
+        material="shader: flat; src: #grassTopBlock; repeat: 500 500"></a-entity>
+      
     </a-scene>
   </body>
 </html>
