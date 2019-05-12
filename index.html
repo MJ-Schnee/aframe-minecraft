@@ -4,17 +4,22 @@
     <meta charset="utf-8">
     <title>A-Frame Minecraft</title>
     <meta name="description" content="Welcome to a VR tour of Loveland High School!">
-    <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/0.9.2/aframe.min.js"></script>
+    <!-- Multi Source -->
+    <!-- srcs: right, left, top, bottom, front, back -->
+    <script src="https://cdn.rawgit.com/elbobo/aframe-multisrc-component/b6d23310/dist/0.3/aframe-multisrc-component.js"></script>
+    <!-- Custom Scripts -->
     <script src="./scripts.js"></script>
   </head>
   <body>
     <a-scene fog="type: linear; color: #90b7ee; far: 220; near: 0;">
       <a-assets>
-        <image id="grassTopBlock" src="./high res textures/grass_top_block.jpg"></image>
-        <image id="dirtBlock" src="./high res textures/dirt_block.jpg"></image>
-        <image id="woodSideBlock" src="./high res textures/wood_side_block.jpg"></image>
-        <image id="cobblestoneBlock" src="./high res textures/cobblestone_block.jpg"></image>
-        <image id="stoneBlock" src="./high res textures/stone_block.jpg"></image>
+        <img id="bedrock" src="./textures/bedrock block.png">
+        <img id="dirt" src="./textures/dirt block.png">
+        <img id="grassBlockSide" src="./textures/grass block side.png">
+        <img id="grassBlockTop" src="./textures/grass block top.jpg">
+        <img id="water" src="./textures/water block.jfif">
       </a-assets>
 
       <!--Sky-->
@@ -23,8 +28,12 @@
       <a-entity geometry="primitive: plane; height: 500; width: 500"
         position="0 0 0"
         rotation="-90 0 0"
-        material="shader: flat; src: #grassTopBlock; repeat: 500 500"></a-entity>
-      
+        material="shader: flat; src: #bedrock; repeat: 500 500"></a-entity>
+      <a-entity geometry="primitive: plane; height: 500; width: 500"
+        position="0 .9 0"
+        rotation="-90 0 0"
+        material="shader: flat; src: #water; opacity: .5; repeat: 500 500"></a-entity>
+
     </a-scene>
   </body>
 </html>
