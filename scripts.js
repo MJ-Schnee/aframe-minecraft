@@ -1,4 +1,4 @@
-var placingBlocks = true;
+var placingBlocks = false;
 var selectedBlock = 1;
 var listOfBlocks = [
   ["#bedrock"],
@@ -50,11 +50,27 @@ AFRAME.registerComponent('isblock', {
   }
 });
 
+/**
+  * Made its own component because certain blocks cannot be broken
+  * Unbreakable blocks: bedrock, water, item in hand
+*/
+AFRAME.registerComponent('breakable', {
+  dependencies: ['isblock'],
+
+  init: function(){
+    const el = this.el;
+    el.addEventListener('triggerdown', () => {
+      if(!placingBlocks)
+        el.parentNode.removeChild(el);
+    });
+  }
+});
+
 AFRAME.registerComponent('blockmanipulator', {
   init: function(){
     const scene = document.querySelector('a-scene');
     const camera = document.querySelector('#head');
-    this.el.addEventListener('mouseup', evt => {
+    this.el.addEventListener('triggerdown', evt => {
       if(placingBlocks){
         // Create new blank entity
         const newBlock = document.createElement('a-entity');
@@ -76,11 +92,13 @@ AFRAME.registerComponent('blockmanipulator', {
           pos.y+=.5;
         newBlock.setAttribute('position', pos);
         newBlock.setAttribute('isBlock', blockTexture);
+        newBlock.setAttribute('breakable', "");
         // Add block to scene
         scene.appendChild(newBlock);
-      } else {
-
       }
+    });
+    this.el.addEventListener('gripdown', () => {
+      placingBlocks = !placingBlocks;
     });
   }
 });
