@@ -1,3 +1,16 @@
+var placingBlocks = true;
+var selectedBlock = 1;
+var listOfBlocks = [
+  ["#bedrock"],
+  ["#cobblestone"],
+  ["#dirt"],
+  ["#grassBlockTop", "#drt", "#grassBlockSide"],
+  ["#sand"],
+  ["#stone"],
+  ["#woodBlockTop", "#woodBlockTop", "#woodBlockSide"],
+  ["#woodenPlank"]
+];
+
 AFRAME.registerComponent('isblock', {
   dependencies: ['position'],
 
@@ -21,11 +34,7 @@ AFRAME.registerComponent('isblock', {
       el.setAttribute('multisrc', "");
       // srcs: right, left, top, bottom, front, back
       // srcs: 0,     1,    2,   3,      4,     5
-      let attributes = "src0:"+srcSides+";"+" src1:"+srcSides+";"+" src4:"+srcSides+";"+" src5:"+srcSides+";"
-      if(srcTop != null){
-        attributes.concat(" src2:"+srcTop+";");
-        attributes.concat(" src3:"+srcBottom);
-      }
+      const attributes = `src0: ${srcSides}; src1: ${srcSides}; src2: ${srcTop}; src3: ${srcBottom}; src4: ${srcSides}; src5: ${srcSides}; `;
       el.setAttribute('multisrc', attributes);
     }
   },
@@ -33,10 +42,45 @@ AFRAME.registerComponent('isblock', {
   update: function(){
     const pos = AFRAME.utils.clone(this.originalPos);
 
-    pos.x = Math.floor(pos.x / .5) * .5;
-    pos.y = Math.floor(pos.y / .5) * .5 + .5;
-    pos.z = Math.floor(pos.z / .5) * .5;
+    pos.x = Math.floor(pos.x+.5);
+    pos.y = Math.floor(pos.y+.5);
+    pos.z = Math.floor(pos.z+.5);
 
     this.el.setAttribute('position', pos);
+  }
+});
+
+AFRAME.registerComponent('blockmanipulator', {
+  init: function(){
+    const scene = document.querySelector('a-scene');
+    const camera = document.querySelector('#head');
+    this.el.addEventListener('mouseup', evt => {
+      if(placingBlocks){
+        // Create new blank entity
+        const newBlock = document.createElement('a-entity');
+        // Get the texture(s) the block will have
+        let blockTexture;
+        if(!(selectedBlock==3 || selectedBlock==6))
+          blockTexture = `src: ${listOfBlocks[selectedBlock][0]}`;
+        else
+          blockTexture = `srcTop: ${listOfBlocks[selectedBlock][0]};
+                          srcBottom: ${listOfBlocks[selectedBlock][1]};
+                          srcSides: ${listOfBlocks[selectedBlock][2]}`;
+        // Give the block attributes
+        let pos = evt.detail.intersection.point;
+        // Fixes user being unable to place block on left side of another block
+        if(Math.abs(pos.x)%1==.5 && camera.getAttribute('rotation').y<0)
+          pos.x-=.5;
+        // Prevents from (re)placing the "ground"
+        if(pos.y<0)
+          pos.y+=.5;
+        newBlock.setAttribute('position', pos);
+        newBlock.setAttribute('isBlock', blockTexture);
+        // Add block to scene
+        scene.appendChild(newBlock);
+      } else {
+
+      }
+    });
   }
 });

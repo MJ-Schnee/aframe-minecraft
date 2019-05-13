@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- npm install -g live-server && live-server -->
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -9,6 +10,8 @@
     <!-- Multi Source -->
     <!-- srcs: right, left, top, bottom, front, back -->
     <script src="https://cdn.rawgit.com/elbobo/aframe-multisrc-component/b6d23310/dist/0.3/aframe-multisrc-component.js"></script>
+    <!-- Teleportation -->
+    <script src="https://unpkg.com/aframe-teleport-controls/dist/aframe-teleport-controls.min.js"></script>
     <!-- Custom Scripts -->
     <script src="./scripts.js"></script>
   </head>
@@ -16,23 +19,38 @@
     <a-scene fog="type: linear; color: #90b7ee; far: 220; near: 0;">
       <a-assets>
         <img id="bedrock" src="./textures/bedrock block.png">
+        <img id="cobblestone" src="./textures/cobblestone block.png">
         <img id="dirt" src="./textures/dirt block.png">
         <img id="grassBlockSide" src="./textures/grass block side.png">
-        <img id="grassBlockTop" src="./textures/grass block top.jpg">
-        <img id="water" src="./textures/water block.jfif">
+        <img id="grassBlockTop" src="./textures/grass block top.png">
+        <img id="sand" src="./textures/sand block.png">
+        <img id="stone" src="./textures/stone block.png">
+        <img id="water" src="./textures/water block.png">
+        <img id="woodBlockSide" src="./textures/wood block side.png">
+        <img id="woodBlockTop" src="./textures/wood block top.png">
+        <img id="woodenPlank" src="./textures/wooden plank block.png">
       </a-assets>
+
+      <!-- Player -->
+      <a-entity id="cameraRig" position="0 1.5 0">
+        <a-entity id="head" camera wasd-controls="acceleration: 250" look-controls>
+          <a-cursor blockmanipulator></a-cursor>
+          <a-entity id="leftHand" oculus-touch-controls="hand: left"
+              teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
+          <a-entity id="rightHand" oculus-touch-controls="hand: right"
+              controller-cursor></a-entity>
+        </a-entity>
+      </a-entity>
 
       <!--Sky-->
       <a-sky color="#87ceeb"></a-sky>
       <!--Floor-->
       <a-entity geometry="primitive: plane; height: 500; width: 500"
-        position="0 0 0"
+        position=".5 -.5 0"
         rotation="-90 0 0"
-        material="shader: flat; src: #bedrock; repeat: 500 500"></a-entity>
-      <a-entity geometry="primitive: plane; height: 500; width: 500"
-        position="0 .9 0"
-        rotation="-90 0 0"
-        material="shader: flat; src: #water; opacity: .5; repeat: 500 500"></a-entity>
+        material="shader: flat; src: #grassBlockTop; repeat: 500 500"></a-entity>
+
+      <a-entity isblock="srcTop: #grassBlockTop; srcBottom: #dirt; srcSides: #grassBlockSide" position="0 0 -2"></a-entity>
 
     </a-scene>
   </body>
