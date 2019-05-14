@@ -1,4 +1,4 @@
-var placingBlocks = false;
+var placingBlocks = true;
 var selectedBlock = 1;
 var listOfBlocks = [
   ["#bedrock"],
@@ -70,7 +70,8 @@ AFRAME.registerComponent('blockmanipulator', {
   init: function(){
     const scene = document.querySelector('a-scene');
     const camera = document.querySelector('#head');
-    this.el.addEventListener('triggerdown', evt => {
+    this.el.addEventListener(`click`, evt => {
+      console.log("triggerdown");
       if(placingBlocks){
         // Create new blank entity
         const newBlock = document.createElement('a-entity');
@@ -83,7 +84,8 @@ AFRAME.registerComponent('blockmanipulator', {
                           srcBottom: ${listOfBlocks[selectedBlock][1]};
                           srcSides: ${listOfBlocks[selectedBlock][2]}`;
         // Give the block attributes
-        let pos = evt.detail.intersection.point;
+        let pos = AFRAME.utils.clone(evt.detail.intersection.point);
+        console.log(pos);
         // Fixes user being unable to place block on left side of another block
         if(Math.abs(pos.x)%1==.5 && camera.getAttribute('rotation').y<0)
           pos.x-=.5;
@@ -91,6 +93,7 @@ AFRAME.registerComponent('blockmanipulator', {
         if(pos.y<0)
           pos.y+=.5;
         newBlock.setAttribute('position', pos);
+        console.log(newBlock.getAttribute('position'));
         newBlock.setAttribute('isBlock', blockTexture);
         newBlock.setAttribute('breakable', "");
         // Add block to scene
@@ -98,7 +101,20 @@ AFRAME.registerComponent('blockmanipulator', {
       }
     });
     this.el.addEventListener('gripdown', () => {
+      console.log("gripdown");
       placingBlocks = !placingBlocks;
+    });
+    this.el.addEventListener('abuttondown', () => {
+      console.log("abuttondown");
+      selectedBlock++;
+      if(selectedBlock >= listOfBlocks.length)
+        selectedBlock = 0;
+    });
+    this.el.addEventListener('bbuttondown', () => {
+      console.log("bbuttondown");
+      selectedBlock--;
+      if(selectedBlock < 0)
+        selectedBlock = listOfBlocks.length-1;
     });
   }
 });
