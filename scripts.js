@@ -70,7 +70,13 @@ AFRAME.registerComponent('blockmanipulator', {
   init: function(){
     const scene = document.querySelector('a-scene');
     const camera = document.querySelector('#head');
-    this.el.addEventListener(`click`, evt => {
+    this.el.addEventListener('raycaster-intersected', evt => {
+      this.raycaster = evt.detail.el;
+    });
+    this.el.addEventListener('raycaster-intersected-cleared', evt => {
+      this.raycaster = null;
+    });
+    this.el.addEventListener(`triggerdown`, evt => {
       console.log("triggerdown");
       if(placingBlocks){
         // Create new blank entity
@@ -84,8 +90,9 @@ AFRAME.registerComponent('blockmanipulator', {
                           srcBottom: ${listOfBlocks[selectedBlock][1]};
                           srcSides: ${listOfBlocks[selectedBlock][2]}`;
         // Give the block attributes
+        let intersection = this.raycaster.components.raycaster.getIntersection(this.el)
         let pos = AFRAME.utils.clone(evt.detail.intersection.point);
-        console.log(pos);
+        console.log(intersection);
         // Fixes user being unable to place block on left side of another block
         if(Math.abs(pos.x)%1==.5 && camera.getAttribute('rotation').y<0)
           pos.x-=.5;
@@ -109,12 +116,14 @@ AFRAME.registerComponent('blockmanipulator', {
       selectedBlock++;
       if(selectedBlock >= listOfBlocks.length)
         selectedBlock = 0;
+      console.log(`new block: ${listOfBlocks[selectedBlock]}`);
     });
     this.el.addEventListener('bbuttondown', () => {
       console.log("bbuttondown");
       selectedBlock--;
       if(selectedBlock < 0)
         selectedBlock = listOfBlocks.length-1;
+      console.log(`new block: ${listOfBlocks[selectedBlock]}`);
     });
   }
 });
