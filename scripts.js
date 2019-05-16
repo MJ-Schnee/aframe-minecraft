@@ -70,13 +70,11 @@ AFRAME.registerComponent('blockmanipulator', {
   init: function(){
     const scene = document.querySelector('a-scene');
     const camera = document.querySelector('#head');
-    this.el.addEventListener('raycaster-intersected', evt => {
-      this.raycaster = evt.detail.el;
+    this.el.addEventListener('raycaster-intersected', evt =>{
+      console.log(evt);
+      console.log(evt.detail.getIntersection(this.el));
     });
-    this.el.addEventListener('raycaster-intersected-cleared', evt => {
-      this.raycaster = null;
-    });
-    this.el.addEventListener(`triggerdown`, evt => {
+    this.el.addEventListener('triggerdown', () => {
       console.log("triggerdown");
       if(placingBlocks){
         // Create new blank entity
@@ -90,9 +88,8 @@ AFRAME.registerComponent('blockmanipulator', {
                           srcBottom: ${listOfBlocks[selectedBlock][1]};
                           srcSides: ${listOfBlocks[selectedBlock][2]}`;
         // Give the block attributes
-        let intersection = this.raycaster.components.raycaster.getIntersection(this.el)
-        let pos = AFRAME.utils.clone(evt.detail.intersection.point);
-        console.log(intersection);
+          //let intersection = this.raycaster.components.raycaster.getIntersection(this.el)
+        let pos = {x: 0, y: 0, z:0};
         // Fixes user being unable to place block on left side of another block
         if(Math.abs(pos.x)%1==.5 && camera.getAttribute('rotation').y<0)
           pos.x-=.5;
@@ -100,9 +97,9 @@ AFRAME.registerComponent('blockmanipulator', {
         if(pos.y<0)
           pos.y+=.5;
         newBlock.setAttribute('position', pos);
-        console.log(newBlock.getAttribute('position'));
         newBlock.setAttribute('isBlock', blockTexture);
         newBlock.setAttribute('breakable', "");
+        newBlock.setAttribute('class', "not-collidable");
         // Add block to scene
         scene.appendChild(newBlock);
       }

@@ -11,7 +11,7 @@
     <!-- srcs: right, left, top, bottom, front, back -->
     <script src="https://cdn.rawgit.com/elbobo/aframe-multisrc-component/b6d23310/dist/0.3/aframe-multisrc-component.js"></script>
     <!-- Teleportation -->
-    <script src="https://rawgit.com/fernandojsg/aframe-teleport-controls/master/dist/aframe-teleport-controls.min.js"></script>
+    <script src="https://unpkg.com/aframe-teleport-controls/dist/aframe-teleport-controls.min.js"></script>
     <!-- Controller Cursor -->
     <script src="https://unpkg.com/aframe-controller-cursor-component@0.2.7/dist/aframe-controller-cursor-component.min.js"></script>
     <!-- Custom Scripts -->
@@ -34,13 +34,13 @@
       </a-assets>
 
       <!-- Player -->
-      <a-entity id="cameraRig">
-        <a-entity id="head" position="0 1.5 0" camera wasd-controls="acceleration: 250" look-controls>
-        </a-entity>
-          <a-entity id="leftHand" oculus-touch-controls="hand: left"
-              teleport-controls="cameraRig: #cameraRig; teleportOrigin: #head;"></a-entity>
-          <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; useWorldCoordinates: true; objects: .collidable; far: 15" blockmanipulator></a-entity>
-      </a-entity>
+      <a-entity id="leftHand"
+          oculus-touch-controls="hand: left"
+          teleport-controls></a-entity>
+      <a-entity id="rightHand"
+          oculus-touch-controls="hand: right"
+          raycaster="showLine: true; useWorldCoordinates: true; objects: .collidable;"
+          blockmanipulator></a-entity>
 
       <!--Sky-->
       <a-sky color="#87ceeb"></a-sky>
