@@ -70,10 +70,6 @@ AFRAME.registerComponent('blockmanipulator', {
   init: function(){
     const scene = document.querySelector('a-scene');
     const camera = document.querySelector('#head');
-    this.el.addEventListener('raycaster-intersected', evt =>{
-      console.log(evt);
-      console.log(evt.detail.getIntersection(this.el));
-    });
     this.el.addEventListener('triggerdown', () => {
       console.log("triggerdown");
       if(placingBlocks){
@@ -122,5 +118,23 @@ AFRAME.registerComponent('blockmanipulator', {
         selectedBlock = listOfBlocks.length-1;
       console.log(`new block: ${listOfBlocks[selectedBlock]}`);
     });
+  }
+});
+
+AFRAME.registerComponent('raycaster-listener', {
+  init: function(){
+    this.el.addEventListener('raycaster-intersected', function(evt) {
+      // ID
+      console.log(evt.detail.intersection.object.el.id);
+      // Class
+      console.log(evt.detail.intersection.object.el.className);
+      /* If you haven't bound `this` to the handler,
+      and only need basic attribute data,
+      you should also be able to do the following, but YMMV:
+      */
+      console.log(this.id);
+      console.log(this.className);
+
+    };
   }
 });
