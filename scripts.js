@@ -59,7 +59,7 @@ AFRAME.registerComponent('breakable', {
 
   init: function(){
     const el = this.el;
-    el.addEventListener('triggerdown', () => {
+    el.addEventListener('mouseup', function(){
       if(!placingBlocks)
         el.parentNode.removeChild(el);
     });
@@ -70,8 +70,7 @@ AFRAME.registerComponent('blockmanipulator', {
   init: function(){
     const scene = document.querySelector('a-scene');
     const camera = document.querySelector('#head');
-    this.el.addEventListener('triggerdown', () => {
-      console.log("triggerdown");
+    this.el.addEventListener('mouseup', function(evt){
       if(placingBlocks){
         // Create new blank entity
         const newBlock = document.createElement('a-entity');
@@ -84,10 +83,9 @@ AFRAME.registerComponent('blockmanipulator', {
                           srcBottom: ${listOfBlocks[selectedBlock][1]};
                           srcSides: ${listOfBlocks[selectedBlock][2]}`;
         // Give the block attributes
-          //let intersection = this.raycaster.components.raycaster.getIntersection(this.el)
-        let pos = {x: 0, y: 0, z:0};
+        let pos = evt.detail.intersection.point;
         // Fixes user being unable to place block on left side of another block
-        if(Math.abs(pos.x)%1==.5 && camera.getAttribute('rotation').y<0)
+        if(Math.abs(pos.x)%1==.5 && camera.getAttribute('rotation').y<=0)
           pos.x-=.5;
         // Prevents from (re)placing the "ground"
         if(pos.y<0)
@@ -95,46 +93,20 @@ AFRAME.registerComponent('blockmanipulator', {
         newBlock.setAttribute('position', pos);
         newBlock.setAttribute('isBlock', blockTexture);
         newBlock.setAttribute('breakable', "");
-        newBlock.setAttribute('class', "not-collidable");
         // Add block to scene
         scene.appendChild(newBlock);
       }
     });
-    this.el.addEventListener('gripdown', () => {
-      console.log("gripdown");
+    this.el.addEventListener('keyup', function(evt){
+      console.log("onKeyUp:\n"+evt);
       placingBlocks = !placingBlocks;
     });
-    this.el.addEventListener('abuttondown', () => {
-      console.log("abuttondown");
-      selectedBlock++;
-      if(selectedBlock >= listOfBlocks.length)
-        selectedBlock = 0;
-      console.log(`new block: ${listOfBlocks[selectedBlock]}`);
-    });
-    this.el.addEventListener('bbuttondown', () => {
-      console.log("bbuttondown");
-      selectedBlock--;
-      if(selectedBlock < 0)
-        selectedBlock = listOfBlocks.length-1;
-      console.log(`new block: ${listOfBlocks[selectedBlock]}`);
-    });
-  }
-});
-
-AFRAME.registerComponent('raycaster-listener', {
-  init: function(){
-    this.el.addEventListener('raycaster-intersected', function(evt) {
-      // ID
-      console.log(evt.detail.intersection.object.el.id);
-      // Class
-      console.log(evt.detail.intersection.object.el.className);
-      /* If you haven't bound `this` to the handler,
-      and only need basic attribute data,
-      you should also be able to do the following, but YMMV:
-      */
-      console.log(this.id);
-      console.log(this.className);
-
-    };
+    window.addEventListener('keyup', function(evt){
+      // Key Code 'r' = 82
+      if(evt.keyCode == 82){
+        placingBlocks = !placingBlocks;
+        console.log(`Placing Blocks = ${placingBlocks}`);
+      }
+    }, false);
   }
 });

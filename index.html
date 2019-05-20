@@ -10,10 +10,8 @@
     <!-- Multi Source -->
     <!-- srcs: right, left, top, bottom, front, back -->
     <script src="https://cdn.rawgit.com/elbobo/aframe-multisrc-component/b6d23310/dist/0.3/aframe-multisrc-component.js"></script>
-    <!-- Teleportation -->
-    <script src="https://unpkg.com/aframe-teleport-controls/dist/aframe-teleport-controls.min.js"></script>
-    <!-- Controller Cursor -->
-    <script src="https://unpkg.com/aframe-controller-cursor-component@0.2.7/dist/aframe-controller-cursor-component.min.js"></script>
+    <!-- Keyboard Controls -->
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.js"></script>
     <!-- Custom Scripts -->
     <script src="./scripts.js"></script>
   </head>
@@ -34,13 +32,11 @@
       </a-assets>
 
       <!-- Player -->
-      <a-entity id="leftHand"
-          oculus-touch-controls="hand: left"
-          teleport-controls></a-entity>
-      <a-entity id="rightHand"
-          oculus-touch-controls="hand: right"
-          raycaster="showLine: true; useWorldCoordinates: true; objects: .collidable;"
-          blockmanipulator></a-entity>
+      <a-entity id="rig" position="0 1.5 0">
+        <a-entity id="head" camera wasd-controls="acceleration: 250" look-controls keyboard-controls>
+          <a-cursor blockmanipulator></a-cursor>
+        </a-entity>
+      </a-entity>
 
       <!--Sky-->
       <a-sky color="#87ceeb"></a-sky>
