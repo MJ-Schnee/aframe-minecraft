@@ -10,31 +10,44 @@
     <!-- Multi Source -->
     <!-- srcs: right, left, top, bottom, front, back -->
     <script src="https://cdn.rawgit.com/elbobo/aframe-multisrc-component/b6d23310/dist/0.3/aframe-multisrc-component.js"></script>
-    <!-- Keyboard Controls -->
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.js"></script>
+    <!-- Animation -->
     <!-- Custom Scripts -->
     <script src="./scripts.js"></script>
   </head>
   <body>
     <a-scene fog="type: linear; color: #90b7ee; far: 220; near: 0;">
       <a-assets>
-        <img id="bedrock" src="./textures/bedrock block.png">
-        <img id="cobblestone" src="./textures/cobblestone block.png">
-        <img id="dirt" src="./textures/dirt block.png">
-        <img id="grassBlockSide" src="./textures/grass block side.png">
-        <img id="grassBlockTop" src="./textures/grass block top.png">
-        <img id="sand" src="./textures/sand block.png">
-        <img id="stone" src="./textures/stone block.png">
-        <img id="water" src="./textures/water block.png">
-        <img id="woodBlockSide" src="./textures/wood block side.png">
-        <img id="woodBlockTop" src="./textures/wood block top.png">
-        <img id="woodenPlank" src="./textures/wooden plank block.png">
+        <!-- Block Textures -->
+        <img id="bedrock" src="./assets/textures/bedrock block.png">
+        <img id="cobblestone" src="./assets/textures/cobblestone block.png">
+        <img id="dirt" src="./assets/textures/dirt block.png">
+        <img id="grassBlockSide" src="./assets/textures/grass block side.png">
+        <img id="grassBlockTop" src="./assets/textures/grass block top.png">
+        <img id="sand" src="./assets/textures/sand block.png">
+        <img id="stone" src="./assets/textures/stone block.png">
+        <img id="water" src="./assets/textures/water block.png">
+        <img id="woodBlockSide" src="./assets/textures/wood block side.png">
+        <img id="woodBlockTop" src="./assets/textures/wood block top.png">
+        <img id="woodenPlank" src="./assets/textures/wooden plank block.png">
+        <!-- Arm Model -->
+        <a-asset-item id="steveArm" src="./assets/steve arm.glb"></a-asset-item>
+        <!-- Background Music -->
+        <audio id="bgMusic" src="./assets/minecraft theme.mp3"></audio>
+        <!-- Sounds -->
+        <audio id="placeSound" src=""></audio>
+        <audio id="breakSound" src=""></audio>
       </a-assets>
 
       <!-- Player -->
-      <a-entity id="rig" position="0 1.5 0">
-        <a-entity id="head" camera wasd-controls="acceleration: 250" look-controls keyboard-controls>
+      <a-entity id="rig" position="0 1.25 0">
+        <a-entity id="head" camera wasd-controls="acceleration: 250"
+          look-controls="pointerLockEnabled: true" playercontrol>
           <a-cursor blockmanipulator></a-cursor>
+          <a-entity id="arm" gltf-model="#steveArm"
+            position=".616 -.201 -.805" rotation="-17.125 20.926 169.446"
+            scale=".03 .03 .03" material="flatShading: true;"></a-entity>
+          <a-entity id="blockInHand" isblock="src: #cobblestone; snappable: false" position="0.477 -0.278 -0.878" scale=".2 .2 .2"></a-entity>
+          <a-sound id="bgMusicPlayer" src="#bgMusic" autoplay="true" volume="1"></a-sound>
         </a-entity>
       </a-entity>
 
